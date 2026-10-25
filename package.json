@@ -1,0 +1,39 @@
+{
+  "name": "@yasirdora/focus-trace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Focus timelines for Playwright test failures.",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./test": {
+      "types": "./dist/test.d.ts",
+      "import": "./dist/test.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "docs"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && playwright test",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "playwright": "^1.64.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.2",
+    "playwright": "1.64.1",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
