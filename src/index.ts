@@ -38,6 +38,7 @@ export async function startFocusTrace(page: Page, options: FocusTraceOptions = {
       report.truncated = true;
       return false;
     }
+    if (message.event.kind === 'gap') report.incomplete = true;
     if (!documents.has(message.token)) documents.set(message.token, documents.size + 1);
     report.events.push({ ...message.event, sequence: report.events.length + 1, document: documents.get(message.token)! });
     return true;

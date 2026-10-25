@@ -5,7 +5,7 @@ export interface ElementRef {
   id: string | null;
   testId: string | null;
 }
-export type EventKind = 'document' | 'keydown' | 'pointerdown' | 'focusin' | 'focusout' | 'removed' | 'checkpoint';
+export type EventKind = 'document' | 'keydown' | 'pointerdown' | 'focusin' | 'focusout' | 'removed' | 'checkpoint' | 'gap';
 export interface FocusEvent {
   sequence: number;
   document: number;
@@ -21,7 +21,7 @@ export interface FocusReport {
   schemaVersion: 1;
   events: FocusEvent[];
   truncated: boolean;
-  /** Teardown could not flush a document, e.g. because the page was closed. */
+  /** A known recording gap or failed document flush means events may be missing. */
   incomplete: boolean;
 }
 export interface FocusTraceOptions {

@@ -16,6 +16,7 @@ export function installRecorder(config: BrowserConfig): void {
   const observers: MutationObserver[] = [];
   let focused: Element | null = null;
   const listeners: Array<[string, EventListener]> = [];
+  let probeObserved = false;
   const send = globals[config.binding] as (message: BrowserMessage) => Promise<boolean>;
 
   function describe(element: EventTarget | null): ElementRef | null {
@@ -58,6 +59,14 @@ export function installRecorder(config: BrowserConfig): void {
     deliver({ elapsed: Math.round((performance.now() - started) * 100) / 100, kind,
       target: describe(target), related: describe(related), key, label });
   }
+  function checkListeners(): void {
+    if (stopped) return;
+    probeObserved = false;
+    document.dispatchEvent(new Event(config.slot));
+    if (probeObserved) return;
+    for (const [name, listener] of listeners) document.addEventListener(name, listener, true);
+    emit('gap', active(), null, null, 'Document listeners were removed; recording resumed.');
+  }
   function checkRemoval(): void {
     if (focused && !focused.isConnected) {
       const removed = focused;
@@ -68,7 +77,7 @@ export function installRecorder(config: BrowserConfig): void {
   function observe(root: Node): void {
     if (roots.has(root)) return;
     roots.add(root);
-    const observer = new MutationObserver(checkRemoval);
+    const observer = new MutationObserver(() => { checkListeners(); checkRemoval(); });
     observer.observe(root, { childList: true, subtree: true });
     observers.push(observer);
   }
@@ -79,15 +88,18 @@ export function installRecorder(config: BrowserConfig): void {
   function targetOf(event: Event): EventTarget | null {
     return event.composedPath()[0] ?? event.target;
   }
-  listen('focusin', event => {
-    checkRemoval();
-    focused = targetOf(event) as Element;
-    // Mutation observers do not cross shadow boundaries.
-    let root = focused.getRootNode();
+  function observeAncestors(element: Element | null): void {
+    let root = element?.getRootNode();
     while (root instanceof ShadowRoot) {
       observe(root);
       root = root.host.getRootNode();
     }
+  }
+  listen(config.slot, () => { probeObserved = true; });
+  listen('focusin', event => {
+    checkRemoval();
+    focused = targetOf(event) as Element;
+    observeAncestors(focused);
     emit('focusin', focused, (event as globalThis.FocusEvent).relatedTarget);
   });
   listen('focusout', event => {
@@ -106,9 +118,10 @@ export function installRecorder(config: BrowserConfig): void {
   listen('pointerdown', event => emit('pointerdown', targetOf(event)));
   observe(document);
   focused = active();
-  if (focused?.getRootNode() instanceof ShadowRoot) observe(focused.getRootNode());
+  observeAncestors(focused);
   globals[config.slot] = {
     async flush(label: string | null, stop: boolean): Promise<void> {
+      checkListeners();
       checkRemoval();
       if (label !== null) emit('checkpoint', active(), null, null, label);
       if (stop) cleanup();
