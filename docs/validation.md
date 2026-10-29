@@ -3,31 +3,31 @@
 This file distinguishes checks executed in the development environment from
 checks that still require a browser-capable environment.
 
-## Browser blocker
+## Browser run, 2026-10-29
 
-On 2026-10-25 the browser suite could not execute: installed Chrome exited during
-startup, and the cached Chromium headless executable reported:
+Installed Chrome 156.0.8078.73 on macOS 27, through `FOCUS_TRACE_CHANNEL=chrome`:
 
-```
-bootstrap_check_in ...: Permission denied (1100)
-```
+- `npm test`: build, 11 host-side tests and 14 browser tests passed.
+- `npm run test:failure`: the intentional failure attached both the JSON and the
+  HTML report, with the recorded focus target.
 
-The Playwright-managed executable for the pinned version was not installed either.
-No browser assertions ran successfully. The package is a development preview,
-not a verified browser release. No permissions or browser security settings were
-changed to work around this failure.
+On 2026-10-25 the same suite could not start a browser (`bootstrap_check_in ...:
+Permission denied (1100)`). That failure came from the sandbox the checks ran in;
+outside it, Chrome started normally. No browser security settings were changed.
 
 ## Checks
 
 - TypeScript build: passed.
 - Host-side protocol/report tests: all 11 passed.
 - TypeScript checks for browser tests, fixture cases and the example: passed.
-- Playwright discovery: 14 browser tests loaded successfully without launching a browser.
-- Browser suite: written; blocked before assertions.
-- Unexpected-failure attachment integration: written; pending browser execution.
-- Packed consumer verification: clean offline install, both ESM export paths and
-  TypeScript declarations passed. This check does not launch a browser.
-- HTML report visual review: pending.
+- Browser suite on Chrome 156: 14 passed.
+- Unexpected-failure attachment integration on Chrome 156: passed.
+- Packed consumer verification (2026-10-25): clean offline install, both ESM export
+  paths and TypeScript declarations passed. This check does not launch a browser.
+- Playwright's own Chromium build for the pinned version: not run locally; the CI
+  workflow runs it on Linux.
+- HTML report visual review on Chrome 156: done for the lost-focus demo
+  (`npm run report-image`, saved as `docs/report.png`).
 - Firefox, WebKit, custom fixture composition and performance measurements: pending.
 
 The protocol unit tests use a fake Playwright transport. They verify event budgets,
