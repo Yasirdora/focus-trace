@@ -1,15 +1,16 @@
 # focus-trace
 
-Focus timelines for Playwright test failures.
+See where keyboard focus went when a Playwright test fails.
 
-Record navigation keys, pointer presses, focus transitions, and removal of focused
-elements. Attach a JSON timeline and a self-contained HTML report to an unexpected
-test failure. The recorder observes behavior; it never calls `focus()`, prevents
-an event, or changes tab order.
+focus-trace records focus changes, navigation keys, pointer presses and removed
+focused elements during a test. When the test fails, it attaches a JSON timeline
+and a self-contained HTML report. It only observes: it never calls `focus()`,
+prevents an event, or changes tab order.
 
-**Development preview.** Browser behavior has not yet been validated in this
-workspace: Chromium startup is blocked by a macOS process permission error. See
-[validation status](docs/validation.md) before relying on the package in CI.
+![HTML report from a failing test: Escape closes a dialog and focus returns to the button that opened it, then the list re-renders, removes that button, and focus falls back to the page body.](docs/report.png)
+
+Version 0.1, not yet on npm. Tested with Chrome on macOS; Firefox and WebKit are
+not tested yet. See [validation status](docs/validation.md).
 
 ## Playwright Test
 
@@ -181,6 +182,8 @@ the same underlying runner. Both entry points should resolve to a single compati
 Playwright installation. Custom suites can compose the exported test with
 Playwright's `mergeTests`; that composition has not yet been validated here.
 
-See [design notes](docs/design.md) for scope and source references. The package
-remains `private` until browser validation, license, and publication metadata have
-been reviewed.
+See [design notes](docs/design.md) for scope and source references.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "description": "Focus timelines for Playwright test failures.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yasirdora/focus-trace.git"
+  },
   "type": "module",
   "sideEffects": false,
   "exports": {
@@ -27,6 +32,7 @@
     "test:unit": "node --test test/unit/*.test.mjs",
     "test:browser": "playwright test",
     "test:failure": "node scripts/verify-failure.mjs",
+    "report-image": "node scripts/report-image.mjs",
     "verify": "node scripts/verify-package.mjs",
     "typecheck:tests": "tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext playwright.config.ts test/*.spec.ts test/fixture-cases/*.ts examples/*.ts"
   },
