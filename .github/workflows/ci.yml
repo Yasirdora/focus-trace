@@ -25,6 +25,9 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Build
+        run: npm run build
+
       - name: Type-check browser tests and examples
         run: npm run typecheck:tests
 
