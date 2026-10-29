@@ -9,8 +9,8 @@ prevents an event, or changes tab order.
 
 ![HTML report from a failing test: Escape closes a dialog and focus returns to the button that opened it, then the list re-renders, removes that button, and focus falls back to the page body.](docs/report.png)
 
-Version 0.1, not yet on npm. Tested with Chrome on macOS; Firefox and WebKit are
-not tested yet. See [validation status](docs/validation.md).
+Version 0.1, not yet on npm. Tested with Chrome on macOS and with Playwright's
+Chromium on Linux in CI; Firefox and WebKit are not tested yet. See [validation status](docs/validation.md).
 
 ## Playwright Test
 

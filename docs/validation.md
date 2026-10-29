@@ -24,8 +24,8 @@ outside it, Chrome started normally. No browser security settings were changed.
 - Unexpected-failure attachment integration on Chrome 156: passed.
 - Packed consumer verification (2026-10-25): clean offline install, both ESM export
   paths and TypeScript declarations passed. This check does not launch a browser.
-- Playwright's own Chromium build for the pinned version: not run locally; the CI
-  workflow runs it on Linux.
+- Playwright's own Chromium build for the pinned version: passed in GitHub Actions on
+  Ubuntu (build, type-check, unit and browser tests, failure attachments, packed package).
 - HTML report visual review on Chrome 156: done for the lost-focus demo
   (`npm run report-image`, saved as `docs/report.png`).
 - Firefox, WebKit, custom fixture composition and performance measurements: pending.
