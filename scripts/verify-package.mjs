@@ -14,7 +14,7 @@ try {
   const packed = JSON.parse(run(npm, ['pack', '--ignore-scripts', '--json', '--pack-destination', scratch], root))[0];
   const files = packed.files.map(file => file.path);
   for (const file of ['dist/index.js', 'dist/index.d.ts', 'dist/test.js', 'dist/test.d.ts', 'README.md', 'docs/validation.md']) assert.ok(files.includes(file), `Missing ${file}`);
-  assert.ok(files.every(file => /^(dist\/|docs\/|README.md$|package.json$)/.test(file)), 'Unexpected packed file');
+  assert.ok(files.every(file => /^(dist\/|docs\/[^/]+\.md$|README.md$|LICENSE$|package.json$)/.test(file)), 'Unexpected packed file');
 
   const consumer = join(scratch, 'consumer');
   mkdirSync(consumer);
